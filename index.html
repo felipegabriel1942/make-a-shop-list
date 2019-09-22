@@ -34,7 +34,7 @@
                                             </div>
                                         </div>                                        
                                     </div>
-                                    <div class="col-3">R$ 0,00</div>
+                                    <div class="col-3 valor-total-label">R$ 0,00</div>
                                 </div>                                   
                             </div>                            
                         </div>
@@ -204,15 +204,15 @@
                                        
                                     <div class="row px-1">
                                         <div  class="form-group col-sm-12 px-0 mb-0">
-                                            <select class="form-control form-control-sm ">
-                                                <option>Padaria</option>
-                                                <option>Hortifruti</option>
-                                                <option>Limpeza</option>
-                                                <option>Higiene pessoal</option>
-                                                <option>Alimentos perecíveis</option>
-                                                <option>Alimentos nao-perecíveis</option>
-                                                <option>Bebidas e sucos</option>
-                                                <option>Papelaria</option>
+                                            <select class="form-control form-control-sm add-tipo">
+                                                <option value="pad">Padaria</option>
+                                                <option value="hor">Hortifruti</option>
+                                                <option value="lim">Limpeza</option>
+                                                <option value="hig">Higiene pessoal</option>
+                                                <option value="per">Alimentos perecíveis</option>
+                                                <option value="nper">Alimentos nao-perecíveis</option>
+                                                <option value="beb">Bebidas e sucos</option>
+                                                <option value="pap">Papelaria</option>
                                             </select>
                                         </div>
                                     </div>
@@ -224,7 +224,7 @@
                                     </div>
                                         
                                     <div class="row px-1">
-                                        <input type="text" placeholder="Descrição" class="form-control form-control-sm"/>
+                                        <input type="text" placeholder="Descrição" class="form-control form-control-sm add-descricao"/>
                                     </div>           
                                 </div>
 
@@ -234,12 +234,12 @@
                                     </div>
                                      
                                     <div class="row px-1">
-                                        <input type="number" placeholder="valor" class="form-control form-control-sm"/>
+                                        <input type="number" placeholder="valor" class="form-control form-control-sm add-valor"/>
                                     </div>
                                 </div>
                                 <div class="col-md-2 px-1">
                                     <div style="padding-top: 30px;">
-                                        <button class="btn btn-sm col-sm-12 py-0" style="background: #2bb673;">
+                                        <button class="btn btn-sm col-sm-12 py-0 add-btn" style="background: #2bb673;">
                                             <img src="img/adicionar.png" width="30" height="30" >
                                         </button>
                                     </div>
