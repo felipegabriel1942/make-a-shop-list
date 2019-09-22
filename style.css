@@ -1,0 +1,41 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    
+}
+
+html {
+    height: auto;
+    min-height: 100%;
+}
+
+body {
+    background-image: linear-gradient(to right top, #bcdac3, #cae0ca, #d7e6d1, #e3ecda, #eef2e4);
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+
+.header {
+    background-color: #83b582;
+    color: white;
+    box-shadow: 1px 1px 5px 1px rgba(0, 0, 0, 0.2);
+}
+
+.resumo-values  {
+    color: rgba(0, 0, 0, 0.5);
+    font-size: 14px;
+    text-align: center;
+    
+}
+.resumo-values label {
+    font-weight: 600;
+    color: rgba(0, 0, 0, 0.60);
+    font-size: 16px;
+    text-align: left;
+}
+
+.card-resumo {
+    padding: 1px;
+}
