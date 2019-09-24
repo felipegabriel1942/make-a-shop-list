@@ -44,8 +44,7 @@ let listController = (function() {
 
     return {
         adicionarItem: function(tipo, descricao, valor) {
-            let novoItem, id;
-            console.log(valor);    
+            let novoItem, id; 
             if (data.todosOsItens[tipo].length > 0) {
                 id = data.todosOsItens[tipo][data.todosOsItens[tipo].length - 1].id + 1;
             } else {
@@ -56,6 +55,19 @@ let listController = (function() {
 
             data.todosOsItens[tipo].push(novoItem);
             return novoItem;
+        },
+
+        deletarItem: function(tipo, id) {
+            let ids, index;
+            ids = data.todosOsItens[tipo].map(function(current) {
+                return current.id;
+            });
+
+            index = ids.indexOf(id);
+
+            if(index !== -1) {
+                data.todosOsItens[tipo].splice(index, 1);
+            }
         },
 
         calcularValorTotalDaLista: function() {
@@ -127,6 +139,11 @@ let UIController = (function() {
         return 'R$ ' + int + '.' + dec;
     }
 
+    let nodeListForEach = function(lista, callback) {
+        for(var i = 0; i < listController.length; i++) {
+            callback(lista[i], i);
+        }
+    }
     
 
     return {
@@ -152,12 +169,33 @@ let UIController = (function() {
                 '</div>' +
             '</div>'
 
-            newHtml = html.replace('%id%', tipo + obj.id);
+            newHtml = html.replace('%id%', tipo + '-' + obj.id);
             newHtml = newHtml.replace('%tipoDeProduto%', tipo);
             newHtml = newHtml.replace('%descricao%', obj.descricao);
             newHtml = newHtml.replace('%valor%', formatNumber(obj.value));
 
+            document.getElementById('lista-compras').style.display = 'block';
+
             document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
+        },
+
+        limparCampos: function() {
+            let campos, arrayCampos;
+
+            campos = document.querySelectorAll(DOMStrings.inputDescricao + ', ' + DOMStrings.inputValor);
+
+            arrayCampos = Array.prototype.slice.call(campos);
+
+            arrayCampos.forEach(function(current, index, array){
+                current.value = '';
+            });
+
+            arrayCampos[0].focus();
+        },
+
+        deletarItemLista: function(selectorId) {
+            let el = document.getElementById(selectorId);
+            el.parentNode.removeChild(el);
         },
 
         getInput: function() {
@@ -197,6 +235,7 @@ let controller = (function(litsCtrl, UICtrl) {
         let DOM = UICtrl.getDOMStrings();
 
         document.querySelector(DOM.inputBtnAdd).addEventListener('click', ctrlAdicionarItem);
+        document.querySelector(DOM.listaComprasContainer).addEventListener('click', ctrlDeleteItem);
     }
 
     let atualizarValores = function() {
@@ -217,7 +256,28 @@ let controller = (function(litsCtrl, UICtrl) {
             UIController.addItemLista(novoItem, input.tipo);
         }
 
+        UICtrl.limparCampos();
+        
         atualizarValores();
+    }
+
+    let ctrlDeleteItem = function(event) {
+        let itemId, splitId, tipo, id;
+
+        itemId = event.target.parentNode.parentNode.parentNode.id;
+
+        if(itemId) {
+            splitId = itemId.split('-');
+            tipo = splitId[0];
+            id = parseInt(splitId[1]);
+        }
+
+        listController.deletarItem(tipo, id);
+
+        UICtrl.deletarItemLista(itemId);
+
+        atualizarValores();
+
     }
     
     return {
