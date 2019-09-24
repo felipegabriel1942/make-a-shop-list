@@ -55,7 +55,6 @@ let listController = (function() {
             novoItem = new Item(id, descricao, valor);
 
             data.todosOsItens[tipo].push(novoItem);
-            console.log(data.todosOsItens);
             return novoItem;
         },
 
@@ -73,7 +72,15 @@ let listController = (function() {
 
         getValores: function() {
             return {
-                valorTotal: data.valorTotal
+                valorTotal: data.valorTotal,
+                valorTotalPadaria: data.totais['pad'],
+                valorTotalHortifruti: data.totais['hor'],
+                valorTotalLimpeza: data.totais['lim'],
+                valorTotalHigiene: data.totais['hig'],
+                valorTotalPereciveis: data.totais['per'],
+                valorTotalNPereciveis: data.totais['nper'],
+                valorTotalBebidas: data.totais['beb'],
+                valorTotalPapelaria: data.totais['pap'],
             }
         }
     }
@@ -89,7 +96,35 @@ let UIController = (function() {
         inputBtnAdd: '.add-btn',
         inputDescricao: '.add-descricao',
         inputValor: '.add-valor',
-        valorTotalLabel: '.valor-total-label'
+        valorTotalLabel: '.valor-total-label',
+        valorTotalPadariaLabel: '.valor-total-padaria-label',
+        valorTotalHortifrutiLabel: '.valor-total-hortifruti-label',
+        valorTotalHigieneLabel: '.valor-total-higiene-label',
+        valorTotalLimpezaLabel: '.valor-total-limpeza-label',
+        valorTotalPereciveisLabel: '.valor-total-pereciveis-label',
+        valorTotalNPereciveisLabel: '.valor-total-nao-pereciveis-label',
+        valorTotalBebidasLabel: '.valor-total-bebidas-label',
+        valorTotalPapelariaLabel: '.valor-total-papelaria-label',
+        listaComprasContainer: '.lista-compras-container'
+    }
+
+    let formatNumber = function(num) {
+
+        let numSplit, int, dec;
+
+        num = Math.abs(num);
+        num = num.toFixed(2);
+
+        numSplit = num.split('.');
+
+        int = numSplit[0];
+        if(int.length > 3) {
+            int = int.substr(0, int.length - 3) + ',' + int.substr(int.length - 3, 3);
+        }
+
+        dec = numSplit[1];
+
+        return 'R$ ' + int + '.' + dec;
     }
 
     
@@ -97,7 +132,32 @@ let UIController = (function() {
     return {
 
         addItemLista: function(obj, tipo) {
-            console.log(tipo);
+            let html, newHtml, element;
+
+            element = DOMStrings.listaComprasContainer;
+            html = '<div class="row" style="border-bottom: 1px solid rgba(0, 0, 0, 0.25)" id="%id%">' +
+                '<div class="col-3 px-0">' +
+                    '<div style="font-size: 14px;">%tipoDeProduto%</div>' +
+                '</div>' +
+                '<div class="col-4 px-0">' +
+                    '<div style="font-size: 14px;">%descricao%</div>' +
+                '</div>' +
+                '<div class="col-3 px-0">' +
+                    '<div style="font-size: 14px;">%valor%</div>' +
+                '</div>' +
+                '<div class="col-2 px-0">' +
+                    '<button class="btn btn-sm col-sm-12 py-0" >' +
+                        '<img src="img/excluir.png" width="25" height="25" >' +
+                    '</button>' +
+                '</div>' +
+            '</div>'
+
+            newHtml = html.replace('%id%', tipo + obj.id);
+            newHtml = newHtml.replace('%tipoDeProduto%', tipo);
+            newHtml = newHtml.replace('%descricao%', obj.descricao);
+            newHtml = newHtml.replace('%valor%', formatNumber(obj.value));
+
+            document.querySelector(element).insertAdjacentHTML('beforeend', newHtml);
         },
 
         getInput: function() {
@@ -109,8 +169,15 @@ let UIController = (function() {
         },
 
         exibirValores: function(obj) {
-            let tipo;
-            document.querySelector(DOMStrings.valorTotalLabel).textContent = obj.valorTotal;
+            document.querySelector(DOMStrings.valorTotalLabel).textContent = formatNumber(obj.valorTotal);
+            document.querySelector(DOMStrings.valorTotalPadariaLabel).textContent = formatNumber(obj.valorTotalPadaria);
+            document.querySelector(DOMStrings.valorTotalHortifrutiLabel).textContent = formatNumber(obj.valorTotalHortifruti);
+            document.querySelector(DOMStrings.valorTotalHigieneLabel).textContent = formatNumber(obj.valorTotalHigiene);
+            document.querySelector(DOMStrings.valorTotalLimpezaLabel).textContent = formatNumber(obj.valorTotalLimpeza);
+            document.querySelector(DOMStrings.valorTotalPereciveisLabel).textContent = formatNumber(obj.valorTotalPereciveis);
+            document.querySelector(DOMStrings.valorTotalNPereciveisLabel).textContent = formatNumber(obj.valorTotalNPereciveis);
+            document.querySelector(DOMStrings.valorTotalBebidasLabel).textContent = formatNumber(obj.valorTotalBebidas);
+            document.querySelector(DOMStrings.valorTotalPapelariaLabel).textContent = formatNumber(obj.valorTotalPapelaria);
         },
 
         getDOMStrings: function() {
@@ -146,6 +213,8 @@ let controller = (function(litsCtrl, UICtrl) {
 
         if (input.descricao !== '' && !isNaN(input.valor) && input.valor > 0) {
             novoItem = listController.adicionarItem(input.tipo, input.descricao, input.valor);
+
+            UIController.addItemLista(novoItem, input.tipo);
         }
 
         atualizarValores();
